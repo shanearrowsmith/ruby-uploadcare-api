@@ -21,13 +21,19 @@ module Uploadcare
       resp['file']
     end
   protected
+    ##
+    # @see http://martinottenwaelter.fr/2010/12/ruby19-and-the-ssl-error/
+    # @see https://gist.github.com/938183
     def response method, path, params = {}
-      connection = Faraday.new url: @options[:upload_url_base] do |faraday|
-        faraday.request :multipart
-        faraday.request :url_encoded
-        faraday.adapter Faraday.default_adapter
-        faraday.headers['User-Agent'] = Uploadcare::user_agent
-      end
+      # For Ubuntu
+      ca_path = '/etc/ssl/certs' if File.exists?('/etc/ssl/certs')
+      connection = Faraday.new :ssl => {:ca_path => ca_path}, 
+                               url: @options[:upload_url_base] do |faraday|
+                                 faraday.request :multipart
+                                 faraday.request :url_encoded
+                                 faraday.adapter Faraday.default_adapter
+                                 faraday.headers['User-Agent'] = Uploadcare::user_agent
+                               end
       r = connection.send(method, path, params)
       raise ArgumentError.new(r.body) if r.status != 200
       JSON.parse(r.body)
