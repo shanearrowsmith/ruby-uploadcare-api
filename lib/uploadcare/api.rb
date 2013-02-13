@@ -2,7 +2,7 @@ require 'faraday'
 require 'json'
 require 'ostruct'
 
-require 'uploadcare/api/account'
+require 'uploadcare/api/project'
 require 'uploadcare/api/file'
 
 module Uploadcare
@@ -13,13 +13,18 @@ module Uploadcare
       @options = Uploadcare::default_settings.merge(options)
     end
 
-    # Get account info
-    def account
-      resp = response(:get, '/account/')
-      Account.new(
-        public_key: resp['pub_key'],
-        email: resp['email'],
-        username: resp['username']
+    # Get project info
+    def project
+      resp = response(:get, '/project/')
+      Project.new(
+        collaborators: resp['collaborators'].map {|col|
+          Project::Collaborator.new(
+            name: col['name'],
+            email: col['email']
+          )
+        },
+        name: resp['name'],
+        public_key: resp['pub_key']
       )
     end
 
