@@ -8,11 +8,11 @@ describe Uploadcare::Api do
     @uploader = Uploadcare::Uploader.new(CONFIG)
   end
 
-  it 'should show account' do
-    account = @api.account
-    account.should be_an_instance_of(Uploadcare::Api::Account)
-    account.public_key.should == CONFIG[:public_key]
-  end
+  # it 'should show account' do
+  #   account = @api.account
+  #   account.should be_an_instance_of(Uploadcare::Api::Account)
+  #   account.public_key.should == CONFIG[:public_key]
+  # end
 
   it 'should return paginated list of files' do
     @uploader.upload_file File.join(File.dirname(__FILE__), 'view.png')
