@@ -21,9 +21,9 @@ Or install it yourself as:
 
 ## Testing
 
-Make `spec/config.yml` like this:
-    
+Run `bundle exec rspec`.
+
+To run tests with your own keys, make a `spec/config.yml` file like this:
+
     public_key: 'PUBLIC KEY'
     private_key: 'PRIVATE KEY'
-
-And run `bundle exec rspec`
