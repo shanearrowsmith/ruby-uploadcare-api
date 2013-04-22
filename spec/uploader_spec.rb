@@ -16,7 +16,7 @@ describe Uploadcare::Uploader do
   end
 
   it 'should upload file from url' do
-    file = @api.file(@uploader.upload_url('http://uploadcare.com'))
+    file = @api.file(@uploader.upload_url('https://uploadcare.com'))
     file.should be_an_instance_of Uploadcare::Api::File
   end
 
