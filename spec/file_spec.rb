@@ -38,4 +38,16 @@ describe Uploadcare::Api::File do
       "#{CONFIG[:static_url_base]}/#{@file.file_id}/-/crop/200x200/-/resize/200x200/"
     @file.public_url.should == "#{CONFIG[:static_url_base]}/#{@file.file_id}/"
   end
+
+  it 'can parse operations' do
+    @file = @api.file("#{@file_id}/-/crop/200x200/-/resize/200x200/")
+    @file.operations.should == ['crop/200x200', 'resize/200x200']
+  end
+
+  it 'can combine operations' do
+    @file = @api.file("#{@file_id}/-/crop/200x200/")
+    @file.public_url('resize/200x200').should ==
+      "#{CONFIG[:static_url_base]}/#{@file.file_id}/-/crop/200x200/-/resize/200x200/"
+    @file.public_url.should == "#{CONFIG[:static_url_base]}/#{@file.file_id}/-/crop/200x200/"
+  end
 end

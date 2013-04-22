@@ -33,8 +33,16 @@ module Uploadcare
       Api::FileList.new(self, response(:get, '/files/', {page: page}))
     end
 
-    def file(file_id)
-      Api::File.new(self, response(:get, "/files/#{file_id}/"))
+    @@cdn_url_re = /
+      (?<uuid>[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})
+      (?:\/-\/(?<operations>.*?))?\/?$
+      /ix
+
+    def file(cdn_url)
+      m = @@cdn_url_re.match(cdn_url)
+      resp = response(:get, "/files/#{m['uuid']}/")
+      resp['operations'] = m['operations'].split('/-/') if m['operations']
+      Api::File.new(self, resp)
     end
 
     def delete_file(file_id)

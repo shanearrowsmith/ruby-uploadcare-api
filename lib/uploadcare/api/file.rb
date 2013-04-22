@@ -18,8 +18,9 @@ module Uploadcare
     end
 
     def public_url(*operations)
+      operations = @table[:operations] + operations if @table[:operations]
       path = operations.empty? ? file_id : [file_id, operations].join('/-/')
-      File.join @api.options[:static_url_base], path, '/' 
+      File.join @api.options[:static_url_base], path, '/'
     end
 
     def reload
