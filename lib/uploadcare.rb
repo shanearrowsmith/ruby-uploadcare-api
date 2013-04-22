@@ -5,7 +5,6 @@ require 'ostruct'
 require 'uploadcare/api'
 require 'uploadcare/uploader'
 require 'uploadcare/version'
-require 'uploadcare/helpers'
 
 module Uploadcare
   def self.default_settings
