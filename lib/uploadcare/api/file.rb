@@ -17,11 +17,12 @@ module Uploadcare
       reload
     end
 
-    def public_url(*operations)
+    def cdn_url(*operations)
       operations = @table[:operations] + operations if @table[:operations]
-      path = operations.empty? ? file_id : [file_id, operations].join('/-/')
-      File.join @api.options[:static_url_base], path, '/'
+      @api.cdn_url(file_id, *operations)
     end
+
+    alias_method :public_url, :cdn_url
 
     def reload
       @table.update @api.file(file_id).instance_variable_get('@table')

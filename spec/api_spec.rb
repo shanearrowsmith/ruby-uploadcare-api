@@ -46,4 +46,11 @@ describe Uploadcare::Api do
     api = Uploadcare::Api.new(CONFIG.merge api_url_base: url.to_s)
     expect { api.project }.to raise_error(Faraday::Error::ConnectionFailed)
   end
+
+  it 'should compose public urls' do
+    file_id = @uploader.upload_file File.join(File.dirname(__FILE__), 'view.png')
+    file = @api.file(file_id)
+    @api.public_url(file.public_url('crop/200x200'), 'resize/200x200').should ==
+      "#{CONFIG[:static_url_base]}/#{file_id}/-/crop/200x200/-/resize/200x200/"
+  end
 end

@@ -38,8 +38,17 @@ module Uploadcare
       (?:\/-\/(?<operations>.*?))?\/?$
       /ix
 
-    def file(cdn_url)
-      m = @@cdn_url_re.match(cdn_url)
+    def cdn_url(base_cdn_url, *operations)
+      m = @@cdn_url_re.match(base_cdn_url)
+      operations = m['operations'].split('/-/') + operations if m['operations']
+      path = operations.empty? ? m['uuid'] : [m['uuid'], operations].join('/-/')
+      ::File.join @options[:static_url_base], path, '/'
+    end
+
+    alias_method :public_url, :cdn_url
+
+    def file(source_cdn_url)
+      m = @@cdn_url_re.match(source_cdn_url)
       resp = response(:get, "/files/#{m['uuid']}/")
       resp['operations'] = m['operations'].split('/-/') if m['operations']
       Api::File.new(self, resp)

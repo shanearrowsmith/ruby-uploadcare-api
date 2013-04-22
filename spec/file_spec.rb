@@ -35,8 +35,8 @@ describe Uploadcare::Api::File do
   it 'can generate public url' do
     @file.store
     @file.public_url('crop/200x200', 'resize/200x200').should ==
-      "#{CONFIG[:static_url_base]}/#{@file.file_id}/-/crop/200x200/-/resize/200x200/"
-    @file.public_url.should == "#{CONFIG[:static_url_base]}/#{@file.file_id}/"
+      "#{CONFIG[:static_url_base]}/#{@file_id}/-/crop/200x200/-/resize/200x200/"
+    @file.public_url.should == "#{CONFIG[:static_url_base]}/#{@file_id}/"
   end
 
   it 'can parse operations' do
@@ -47,7 +47,7 @@ describe Uploadcare::Api::File do
   it 'can combine operations' do
     @file = @api.file("#{@file_id}/-/crop/200x200/")
     @file.public_url('resize/200x200').should ==
-      "#{CONFIG[:static_url_base]}/#{@file.file_id}/-/crop/200x200/-/resize/200x200/"
-    @file.public_url.should == "#{CONFIG[:static_url_base]}/#{@file.file_id}/-/crop/200x200/"
+      "#{CONFIG[:static_url_base]}/#{@file_id}/-/crop/200x200/-/resize/200x200/"
+    @file.public_url.should == "#{CONFIG[:static_url_base]}/#{@file_id}/-/crop/200x200/"
   end
 end
