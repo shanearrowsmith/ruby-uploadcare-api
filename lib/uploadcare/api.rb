@@ -38,6 +38,12 @@ module Uploadcare
       (?:\/-\/(?<operations>.*?))?\/?$
       /ix
 
+    def uuid(source)
+      source = source.file_id if source.is_a? Api::File
+      m = @@cdn_url_re.match(source)
+      m && m['uuid']
+    end
+
     def cdn_url(base_cdn_url, *operations)
       m = @@cdn_url_re.match(base_cdn_url)
       operations = m['operations'].split('/-/') + operations if m['operations']

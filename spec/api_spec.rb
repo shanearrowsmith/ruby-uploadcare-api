@@ -47,6 +47,15 @@ describe Uploadcare::Api do
     expect { api.project }.to raise_error(Faraday::Error::ConnectionFailed)
   end
 
+  it 'should extract uuids' do
+    file_id = @uploader.upload_file File.join(File.dirname(__FILE__), 'view.png')
+    file = @api.file(file_id)
+    @api.uuid(file).should == file_id
+    @api.uuid(file.public_url).should == file_id
+    @api.uuid(file_id).should == file_id
+    @api.uuid('not uuid').should be_nil
+  end
+
   it 'should compose public urls' do
     file_id = @uploader.upload_file File.join(File.dirname(__FILE__), 'view.png')
     file = @api.file(file_id)
