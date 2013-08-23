@@ -16,8 +16,8 @@ Gem::Specification.new do |gem|
   gem.version       = Uploadcare::VERSION
   gem.add_runtime_dependency 'faraday'
   gem.add_runtime_dependency 'multipart-post'
+  gem.add_runtime_dependency 'mime-types'
 
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'pry'
-  gem.add_development_dependency 'mime-types'
 end
