@@ -10,7 +10,7 @@ describe Uploadcare::Uploader do
     file_id = ''
     expect {
       file_id = @uploader.upload_file File.join(File.dirname(__FILE__), 'view.png')
-    }.to_not raise_error(ArgumentError)
+    }.to_not raise_error
 
     file_id.size.should > 0
   end
@@ -24,6 +24,6 @@ describe Uploadcare::Uploader do
     expect {
       uploader = Uploadcare::Uploader.new CONFIG.merge({public_key: 'invalid'})
       uploader.upload_file File.join(File.dirname(__FILE__), 'view.png')
-    }.to raise_error(ArgumentError)
+    }.to raise_error
   end
 end

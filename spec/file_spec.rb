@@ -10,26 +10,26 @@ describe Uploadcare::Api::File do
 
   it 'should be able to store self' do
     @file.store
-    @file.last_keep_claim.should be
+    @file.datetime_stored.should be
   end
 
   it 'should be able to delete self' do
     @file.delete
-    @file.removed.should be
+    @file.datetime_removed.should be
   end
 
   it 'should show upload_date as Time' do
-    @file.upload_date.should be_an_instance_of(Time)
+    @file.datetime_uploaded.should be_an_instance_of(Time)
   end
 
   it 'should show last_keep_claim as Time' do
     @file.store
-    @file.last_keep_claim.should be_an_instance_of(Time)
+    @file.datetime_stored.should be_an_instance_of(Time)
   end
 
   it 'should show removed as Time' do
     @file.delete
-    @file.removed.should be_an_instance_of(Time)
+    @file.datetime_removed.should be_an_instance_of(Time)
   end
 
   it 'can generate public url' do
