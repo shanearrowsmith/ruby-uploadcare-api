@@ -33,6 +33,7 @@ module Uploadcare
     def is_public
       !!@table[:datetime_stored]
     end
+    alias_method :is_stored, :is_public
 
     def uuid
       @table[:uuid]
