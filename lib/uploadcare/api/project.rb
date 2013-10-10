@@ -10,11 +10,12 @@ module Uploadcare
 
       def initialize api, project
         @api = api
-        super(name: project["name"], 
-          pub_key: project["pub_key"], 
+        super(
+          name: project["name"],
+          pub_key: project["pub_key"],
           collaborators: project["collaborators"].map {|c| Collaborator.new(c)},
           autostore_enabled: project["autostore_enabled"]
-          )
+        )
       end
 
       class Collaborator < OpenStruct

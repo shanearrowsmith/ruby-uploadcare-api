@@ -21,30 +21,25 @@ module Uploadcare
       operations = @table[:operations] + operations if @table[:operations]
       @api.cdn_url(uuid, *operations)
     end
-
     alias_method :public_url, :cdn_url
 
     def reload
       @table.update @api.file(uuid).instance_variable_get('@table')
     end
 
-    # for some reasone there is no is_public in api responce (despine being described in docs)
-    # so i just mock the actual is_public with client logic
-    def is_public
+    def is_stored
       !!@table[:datetime_stored]
     end
-    alias_method :is_stored, :is_public
+    alias_method :is_public, :is_stored
 
     def uuid
       @table[:uuid]
     end
     alias_method :file_id, :uuid
 
-
     def datetime_stored
       Time.parse(@table[:datetime_stored]) if @table[:datetime_stored]
     end
-
     alias_method :last_keep_claim, :datetime_stored 
 
     def datetime_uploaded

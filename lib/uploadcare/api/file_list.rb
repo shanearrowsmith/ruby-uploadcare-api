@@ -11,9 +11,7 @@ module Uploadcare
       @pages = response['pages'].to_i
     end
 
-
-    # i just want to get rid of @api.files.files[]
-    # it is just dumb.
+    # we need to get rid of @api.files.files[]
     # for now on we will proxy the [] method down to the actual files collection.
     def [] index
       @files[index]

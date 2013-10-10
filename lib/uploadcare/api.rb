@@ -1,4 +1,5 @@
 require 'faraday'
+require 'faraday_middleware'
 require 'json'
 require 'ostruct'
 
@@ -24,20 +25,16 @@ module Uploadcare
       @project ||= Uploadcare::Api::Project.new(self, request(:get, "/project/"))
     end
 
-
     # proxy file for uploading
     def upload_file path
       @uploader.upload_file path
     end
 
-
     # proxy url for uploading
     def upload_file_by_url url
       @uploader.upload_url url
     end
-
     alias_method :upload_url, :upload_file_by_url
-
 
     # get the files
     # if caching is enabled - it will not get it for every request
@@ -53,7 +50,6 @@ module Uploadcare
       @files
     end
 
-
     # forse load of files list
     def load_files(page=1)
       @files = Api::FileList.new(self, request(:get, '/files/', {page: page}))
@@ -67,27 +63,23 @@ module Uploadcare
     # def file uuid_or_url
     # end
 
-
     def store_file uuid
       object = request :put, "/files/#{uuid}/storage/"  
       file = Uploadcare::Api::File.new(self, object) if object
     end
 
-
     def delete_file uuid
-      object = request :delete, "/files/#{uuid}/"
+      object = request :delete, "/files/#{uuid}/storage/"
       file = Uploadcare::Api::File.new(self, object) if object
     end
 
-
-    # wtf secion
+    # wtf section
     # just leave it here for backwards compability
     def uuid(source)
       source = source.uuid if source.is_a? Api::File
       m = CDN_URL_REGEX.match(source)
       m && m['uuid']
     end
-
 
     def cdn_url(base_cdn_url, *operations)
       m = CDN_URL_REGEX.match(base_cdn_url)
@@ -96,7 +88,6 @@ module Uploadcare
       ::File.join @options[:static_url_base], path, '/'
     end
     alias_method :public_url, :cdn_url
-
 
     def file(source_cdn_url)
       m = CDN_URL_REGEX.match(source_cdn_url)
@@ -108,8 +99,9 @@ module Uploadcare
     def request method = :get, path = "/files/", params = {}
       connection = Faraday.new url: @options[:api_url_base] do |frd|
         frd.request :url_encoded
+        frd.use FaradayMiddleware::FollowRedirects, limit: 3
         frd.adapter :net_http # actually, default adapter, just to be clear
-        frd.headers['Authorization'] = "UploadCare.Simple #{@options[:public_key]}:#{@options[:private_key]}"
+        frd.headers['Authorization'] = "Uploadcare.Simple #{@options[:public_key]}:#{@options[:private_key]}"
         frd.headers['Accept'] = "application/vnd.uploadcare-v#{@options[:api_version]}+json"
         frd.headers['User-Agent'] = Uploadcare::user_agent
       end 
@@ -139,7 +131,6 @@ module Uploadcare
         raise ArgumentError.new(message)
       end
     end
-
     alias_method :api_request, :request
 
   end
