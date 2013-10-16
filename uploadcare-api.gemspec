@@ -7,8 +7,9 @@ Gem::Specification.new do |gem|
                        "@romanonthego (Roman Dubinin)"]
   gem.email         = ["hello@uploadcare.com"]
   gem.description   = "Ruby wrapper for Uploadcare service"
-  gem.summary       = "Ruby wrapper for Uploadcare service"
+  gem.summary       = "ruby lib for Uploadcare API"
   gem.homepage      = "https://uploadcare.com"
+  gem.license       = "MIT"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
