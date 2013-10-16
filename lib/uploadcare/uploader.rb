@@ -14,9 +14,10 @@ module Uploadcare
     end
 
     def upload_file(path)
+
       resp = response :post, '/base/', {
         UPLOADCARE_PUB_KEY: @options[:public_key],
-        file: Faraday::UploadIO.new(path, MIME::Types.of(path))
+        file: Faraday::UploadIO.new(path, MIME::Types.of(path)[0].content_type)
       }
       resp['file']
     end
@@ -24,6 +25,9 @@ module Uploadcare
     ##
     # @see http://martinottenwaelter.fr/2010/12/ruby19-and-the-ssl-error/
     # @see https://gist.github.com/938183
+
+    # TODO: refactor this peach of unstable mess.
+    # 
     def response method, path, params = {}
       # For Ubuntu
       ca_path = '/etc/ssl/certs' if File.exists?('/etc/ssl/certs')
@@ -36,7 +40,11 @@ module Uploadcare
         end
       r = connection.send(method, path, params)
       raise ArgumentError.new(r.body) if r.status != 200
-      JSON.parse(r.body)
+      begin
+        JSON.parse(r.body)
+      rescue JSON::ParserError
+        r.body
+      end
     end
   end
 end

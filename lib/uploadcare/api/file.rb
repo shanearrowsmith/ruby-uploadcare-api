@@ -8,49 +8,48 @@ module Uploadcare
     end
 
     def delete
-      @api.delete_file(file_id)
+      @api.delete_file(uuid)
       reload
     end
 
     def store
-      @api.store_file(file_id)
+      @api.store_file(uuid)
       reload
     end
 
     def cdn_url(*operations)
       operations = @table[:operations] + operations if @table[:operations]
-      @api.cdn_url(file_id, *operations)
+      @api.cdn_url(uuid, *operations)
     end
-
     alias_method :public_url, :cdn_url
 
     def reload
-      @table.update @api.file(file_id).instance_variable_get('@table')
+      @table.update @api.file(uuid).instance_variable_get('@table')
     end
 
-    def last_keep_claim
-      Time.parse(@table[:last_keep_claim]) if @table[:last_keep_claim]
+    def is_stored
+      !!@table[:datetime_stored]
     end
+    alias_method :is_public, :is_stored
 
-    def upload_date
-      Time.parse(@table[:upload_date]) if @table[:upload_date]
+    def uuid
+      @table[:uuid]
     end
+    alias_method :file_id, :uuid
 
-    def removed
-      Time.parse(@table[:removed]) if @table[:removed]
+    def datetime_stored
+      Time.parse(@table[:datetime_stored]) if @table[:datetime_stored]
     end
-  end
+    alias_method :last_keep_claim, :datetime_stored 
 
-  class Api::FileList
-    attr_accessor :files, :page, :per_page, :total, :pages
-    
-    def initialize api, results
-      @api = api
-      @files = results['results'].map{|obj| Api::File.new(api, obj)}
-      @page = results['page'].to_i
-      @per_page = results['per_page'].to_i
-      @total = results['total'].to_i
-      @pages = results['pages'].to_i
+    def datetime_uploaded
+      Time.parse(@table[:datetime_uploaded]) if @table[:datetime_uploaded]
     end
+    alias_method :upload_date, :datetime_uploaded
+
+    def datetime_removed
+      Time.parse(@table[:datetime_removed]) if @table[:datetime_removed]
+    end
+    alias_method :removed, :datetime_removed
   end
 end

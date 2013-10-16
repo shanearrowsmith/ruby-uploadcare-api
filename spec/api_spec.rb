@@ -11,7 +11,7 @@ describe Uploadcare::Api do
   it 'should show project' do
     project = @api.project
     project.should be_an_instance_of(Uploadcare::Api::Project)
-    project.public_key.should == CONFIG[:public_key]
+    project.pub_key.should == CONFIG[:public_key]
   end
 
   it 'should return paginated list of files' do
@@ -31,7 +31,7 @@ describe Uploadcare::Api do
     file_id = @uploader.upload_file File.join(File.dirname(__FILE__), 'view.png')
     file = @api.file(file_id)
     file.should be_an_instance_of Uploadcare::Api::File
-    file.file_id.should == file_id
+    file.uuid.should == file_id
     file.original_filename.should == 'view.png'
   end
 

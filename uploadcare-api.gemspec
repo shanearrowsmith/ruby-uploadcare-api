@@ -2,8 +2,10 @@
 require File.expand_path('../lib/uploadcare/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Vadim Rastyagaev"]
-  gem.email         = ["abc@oktoberliner.ru"]
+  gem.authors       = ["@rastyagaev (Vadim Rastyagaev)",
+                       "@dimituri (Dimitry Solovyov)",
+                       "@romanonthego (Roman Dubinin)"]
+  gem.email         = ["hello@uploadcare.com"]
   gem.description   = "Ruby wrapper for Uploadcare service"
   gem.summary       = "Ruby wrapper for Uploadcare service"
   gem.homepage      = "https://uploadcare.com"
@@ -15,6 +17,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Uploadcare::VERSION
   gem.add_runtime_dependency 'faraday'
+  gem.add_runtime_dependency 'faraday_middleware'
   gem.add_runtime_dependency 'multipart-post'
   gem.add_runtime_dependency 'mime-types'
 
