@@ -2,7 +2,7 @@
 require File.expand_path('../lib/uploadcare/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["@oktoberliner (Vadim Rastyagaev)",
+  gem.authors       = ["@rastyagaev (Vadim Rastyagaev)",
                        "@dimituri (Dimitry Solovyov)",
                        "@romanonthego (Roman Dubinin)"]
   gem.email         = ["hello@uploadcare.com"]
