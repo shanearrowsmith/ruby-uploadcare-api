@@ -31,8 +31,8 @@ module Uploadcare
     end
 
     # proxy url for uploading
-    def upload_file_by_url url
-      @uploader.upload_url url
+    def upload_file_by_url(url, *options)
+      @uploader.upload_url(url, *options)
     end
     alias_method :upload_url, :upload_file_by_url
 
