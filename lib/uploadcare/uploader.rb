@@ -1,4 +1,5 @@
 require 'mime/types'
+require 'timeout'
 
 module Uploadcare
   class Uploader
@@ -6,11 +7,12 @@ module Uploadcare
       @options = Uploadcare::default_settings.merge(options)
     end
 
-    def upload_url url
+    def upload_url(url, timeout=30, interval=0.3)
       token = response :post, '/from_url/', { source_url: url, pub_key: @options[:public_key] }
-      sleep 0.5 while (r = response(:post, '/from_url/status/', token))['status'] == 'unknown'
-      raise ArgumentError.new(r['error']) if r['status'] == 'error'
-      r['file_id']
+      Timeout.timeout(timeout) do
+        sleep interval while (r = upload_url_status(token))['status'] != 'success'
+        r.fetch('file_id')
+      end
     end
 
     def upload_file(path)
@@ -20,6 +22,12 @@ module Uploadcare
         file: Faraday::UploadIO.new(path, MIME::Types.of(path)[0].content_type)
       }
       resp['file']
+    end
+
+    def upload_url_status(token)
+      resp = response(:post, '/from_url/status/', token)
+      raise ArgumentError.new(resp['error']) if resp['status'] == 'error'
+      resp
     end
   protected
     ##
