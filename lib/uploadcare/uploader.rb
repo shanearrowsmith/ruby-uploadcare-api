@@ -8,7 +8,7 @@ module Uploadcare
     end
 
     def upload_url(url, timeout=30, interval=0.3)
-      token = response :post, '/from_url/', { source_url: url, pub_key: @options[:public_key] }
+      token = response :post, '/from_url/', { source_url: url, pub_key: @options[:public_key], store: @options[:store] }
       Timeout.timeout(timeout) do
         sleep interval while (r = upload_url_status(token))['status'] != 'success'
         r.fetch('file_id')
@@ -19,6 +19,7 @@ module Uploadcare
 
       resp = response :post, '/base/', {
         UPLOADCARE_PUB_KEY: @options[:public_key],
+        UPLOADCARE_STORE: @options[:store],
         file: Faraday::UploadIO.new(path, MIME::Types.of(path)[0].content_type)
       }
       resp['file']

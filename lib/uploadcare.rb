@@ -16,6 +16,7 @@ module Uploadcare
       static_url_base: 'http://www.ucarecdn.com',
       api_version: '0.3',
       cache_files: true,
+      store: 'auto',
     }
   end
 
