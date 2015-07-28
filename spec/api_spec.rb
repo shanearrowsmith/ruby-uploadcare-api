@@ -44,7 +44,7 @@ describe Uploadcare::Api do
     url = URI::parse CONFIG[:api_url_base]
     url.host = Socket.getaddrinfo(url.host, url.scheme).first[2]
     api = Uploadcare::Api.new(CONFIG.merge api_url_base: url.to_s)
-    expect { api.project }.to raise_error(Faraday::Error::ConnectionFailed)
+    expect { api.project }.to raise_error(Faraday::SSLError)
   end
 
   it 'should extract uuids' do

@@ -16,9 +16,9 @@ module Uploadcare
        (?:\/-\/(?<operations>.*?))?\/?$
        /ix
 
-    def initialize options = {}
+    def initialize(options = {})
       @options = Uploadcare::default_settings.merge(options)
-      @uploader = Uploadcare::Uploader.new(options)
+      @uploader = Uploadcare::Uploader.new(@options)
     end
 
     def project
@@ -26,7 +26,7 @@ module Uploadcare
     end
 
     # proxy file for uploading
-    def upload_file path
+    def upload_file(path)
       @uploader.upload_file path
     end
 
@@ -51,8 +51,8 @@ module Uploadcare
     end
 
     # forse load of files list
-    def load_files(page=1)
-      @files = Api::FileList.new(self, request(:get, '/files/', {page: page}))
+    def load_files(page = 1)
+      @files = Api::FileList.new(self, request(:get, '/files/', { page: page }))
     end
 
     # TODO: implement better interface for geting file object by:
@@ -63,8 +63,8 @@ module Uploadcare
     # def file uuid_or_url
     # end
 
-    def store_file uuid
-      object = request :put, "/files/#{uuid}/storage/"  
+    def store_file(uuid)
+      object = request :put, "/files/#{uuid}/storage/"
       file = Uploadcare::Api::File.new(self, object) if object
     end
 
@@ -96,7 +96,7 @@ module Uploadcare
       Api::File.new(self, resp)
     end
 
-    def request method = :get, path = "/files/", params = {}
+    def request(method = :get, path = "/files/", params = {})
       connection = Faraday.new url: @options[:api_url_base] do |frd|
         frd.request :url_encoded
         frd.use FaradayMiddleware::FollowRedirects, limit: 3
