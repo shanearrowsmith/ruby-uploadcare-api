@@ -17,8 +17,8 @@ Gem::Specification.new do |gem|
   gem.name          = "uploadcare-api"
   gem.require_paths = ["lib"]
   gem.version       = Uploadcare::VERSION
-  gem.add_runtime_dependency 'faraday'
-  gem.add_runtime_dependency 'faraday_middleware'
+  gem.add_runtime_dependency 'faraday', '0.9.1'
+  gem.add_runtime_dependency 'faraday_middleware', '0.10.0'
   gem.add_runtime_dependency 'multipart-post'
   gem.add_runtime_dependency 'mime-types'
 
