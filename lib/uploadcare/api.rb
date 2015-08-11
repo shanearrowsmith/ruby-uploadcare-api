@@ -27,7 +27,11 @@ module Uploadcare
 
     # proxy file for uploading
     def upload_file(path)
-      @uploader.upload_ruby_file path
+      @uploader.upload_file path
+    end
+
+    def upload_ruby_file(file)
+      @uploader.upload_ruby_file file
     end
 
     # proxy url for uploading
