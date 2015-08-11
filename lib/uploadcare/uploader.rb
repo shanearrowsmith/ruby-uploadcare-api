@@ -30,6 +30,16 @@ module Uploadcare
       raise ArgumentError.new(resp['error']) if resp['status'] == 'error'
       resp
     end
+
+    def upload_ruby_file(file)
+      resp = response :post, '/base/', {
+        UPLOADCARE_PUB_KEY: @options[:public_key],
+        UPLOADCARE_STORE: @options[:store],
+        file: Faraday::UploadIO.new(file.tempfile.path, file.type)
+      }
+      resp['file']
+    end 
+    
   protected
     ##
     # @see http://martinottenwaelter.fr/2010/12/ruby19-and-the-ssl-error/
